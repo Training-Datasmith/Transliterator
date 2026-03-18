@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 $UTF8_TO_ASCII[0x56] = [
 'Di ', 'Qi ', 'Jiao ', 'Chong ', 'Jiao ', 'Kai ', 'Tan ', 'San ', 'Cao ', 'Jia ', 'Ai ', 'Xiao ', 'Piao ', 'Lou ', 'Ga ', 'Gu ',
 'Xiao ', 'Hu ', 'Hui ', 'Guo ', 'Ou ', 'Xian ', 'Ze ', 'Chang ', 'Xu ', 'Po ', 'De ', 'Ma ', 'Ma ', 'Hu ', 'Lei ', 'Du ',

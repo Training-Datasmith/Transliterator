@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 $UTF8_TO_ASCII[0x50] = [
 'Chang ', 'Chi ', 'Bing ', 'Zan ', 'Yao ', 'Cui ', 'Lia ', 'Wan ', 'Lai ', 'Cang ', 'Zong ', 'Ge ', 'Guan ', 'Bei ', 'Tian ', 'Shu ',
 'Shu ', 'Men ', 'Dao ', 'Tan ', 'Jue ', 'Chui ', 'Xing ', 'Peng ', 'Tang ', 'Hou ', 'Yi ', 'Qi ', 'Ti ', 'Gan ', 'Jing ', 'Jie ',

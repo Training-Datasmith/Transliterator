@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Transliterator;
 
 /**
@@ -43,7 +45,7 @@ abstract class Transliterator
             }
             if ((ord($string[$i]) & 0xE0) == 0xC0) { // 110bbbbb
                 $n = 1;
-            }  elseif ((ord($string[$i]) & 0xF0) == 0xE0) { //1110bbbb
+            } elseif ((ord($string[$i]) & 0xF0) == 0xE0) { //1110bbbb
                 $n = 2;
             } elseif ((ord($string[$i]) & 0xF8) == 0xF0) { // 11110bbb
                 $n = 3;
@@ -51,8 +53,7 @@ abstract class Transliterator
                 $n = 4;
             } elseif ((ord($string[$i]) & 0xFE) == 0xFC) { // 1111110b
                 $n = 5;
-            }
-            else {
+            } else {
                 return false; // Does not match any model
             }
 
@@ -576,10 +577,19 @@ abstract class Transliterator
         $text = preg_replace('/\W/', ' ', $text);
 
         // More stripping. Replace spaces with dashes
-        $text = strtolower(preg_replace('/[^A-Za-z0-9\/]+/', $separator,
-            preg_replace('/([a-z\d])([A-Z])/', '\1_\2',
-                preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2',
-                    preg_replace('/::/', '/', $text)))));
+        $text = strtolower(preg_replace(
+            '/[^A-Za-z0-9\/]+/',
+            $separator,
+            preg_replace(
+                '/([a-z\d])([A-Z])/',
+                '\1_\2',
+                preg_replace(
+                    '/([A-Z]+)([A-Z][a-z])/',
+                    '\1_\2',
+                    preg_replace('/::/', '/', $text)
+                )
+            )
+        ));
 
         return trim($text, $separator);
     }

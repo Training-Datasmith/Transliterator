@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Tests\Transliterator;
 
 use Behat\Transliterator\Transliterator;
@@ -17,16 +19,16 @@ class TransliteratorTest extends TestCase
 
     public function provideUtf8ConversionCases()
     {
-        return array(
-            array('', ''),
-            array('BonJour', 'BonJour'),
-            array('Déjà', 'Deja'),
-            array('trąnslįteration tėst ųsąge ūž', 'transliteration test usage uz'),
-            array('това е тестово заглавие', 'tova e testovo zaglavie'),
-            array('це є тестовий заголовок з ґ, є, ї, і', 'tse ie testovii zagolovok z g\', ie, yi, i'),
-            array('это тестовый заголовок', 'eto testovyi zagolovok'),
-            array('führen Aktivitäten Haglöfs', 'fuhren Aktivitaten Haglofs'),
-        );
+        return [
+            ['', ''],
+            ['BonJour', 'BonJour'],
+            ['Déjà', 'Deja'],
+            ['trąnslįteration tėst ųsąge ūž', 'transliteration test usage uz'],
+            ['това е тестово заглавие', 'tova e testovo zaglavie'],
+            ['це є тестовий заголовок з ґ, є, ї, і', 'tse ie testovii zagolovok z g\', ie, yi, i'],
+            ['это тестовый заголовок', 'eto testovyi zagolovok'],
+            ['führen Aktivitäten Haglöfs', 'fuhren Aktivitaten Haglofs'],
+        ];
     }
 
     /**
@@ -39,18 +41,18 @@ class TransliteratorTest extends TestCase
 
     public function provideTransliterationCases()
     {
-        return array(
-            array('', ''),
-            array('BonJour', 'bonjour'),
-            array('BonJour & au revoir', 'bonjour-au-revoir'),
-            array('Déjà', 'deja'),
-            array('trąnslįteration tėst ųsąge ūž', 'transliteration-test-usage-uz'),
-            array('това е тестово заглавие', 'tova-e-testovo-zaglavie'),
-            array('це є тестовий заголовок з ґ, є, ї, і', 'tse-ie-testovii-zagolovok-z-g-ie-yi-i'),
-            array('это тестовый заголовок', 'eto-testovyi-zagolovok'),
-            array('führen Aktivitäten Haglöfs', 'fuhren-aktivitaten-haglofs'),
-            array("that it's 'eleven' 'o'clock'", "that-its-eleven-oclock"),
-        );
+        return [
+            ['', ''],
+            ['BonJour', 'bonjour'],
+            ['BonJour & au revoir', 'bonjour-au-revoir'],
+            ['Déjà', 'deja'],
+            ['trąnslįteration tėst ųsąge ūž', 'transliteration-test-usage-uz'],
+            ['това е тестово заглавие', 'tova-e-testovo-zaglavie'],
+            ['це є тестовий заголовок з ґ, є, ї, і', 'tse-ie-testovii-zagolovok-z-g-ie-yi-i'],
+            ['это тестовый заголовок', 'eto-testovyi-zagolovok'],
+            ['führen Aktivitäten Haglöfs', 'fuhren-aktivitaten-haglofs'],
+            ["that it's 'eleven' 'o'clock'", 'that-its-eleven-oclock'],
+        ];
     }
 
     /**
@@ -63,13 +65,13 @@ class TransliteratorTest extends TestCase
 
     public function provideUnaccentCases()
     {
-        return array(
-            array('', ''),
-            array('BonJour', 'BonJour'),
-            array('Déjà', 'Deja'),
-            array('това е тестово заглавие', 'това е тестово заглавие'),
-            array('це є тестовий заголовок з ґ, є, ї, і', 'це є тестовий заголовок з ґ, є, ї, і'),
-        );
+        return [
+            ['', ''],
+            ['BonJour', 'BonJour'],
+            ['Déjà', 'Deja'],
+            ['това е тестово заглавие', 'това е тестово заглавие'],
+            ['це є тестовий заголовок з ґ, є, ї, і', 'це є тестовий заголовок з ґ, є, ї, і'],
+        ];
     }
 
     /**
@@ -82,13 +84,13 @@ class TransliteratorTest extends TestCase
 
     public function provideUrlizationCases()
     {
-        return array(
-            array('', ''),
-            array('BonJour', 'bonjour'),
-            array('BonJour & au revoir', 'bonjour-au-revoir'),
-            array('Déjà', 'deja'),
-            array('това е тестово заглавие', ''),
-            array('це є тестовий заголовок з ґ, є, ї, і', ''),
-        );
+        return [
+            ['', ''],
+            ['BonJour', 'bonjour'],
+            ['BonJour & au revoir', 'bonjour-au-revoir'],
+            ['Déjà', 'deja'],
+            ['това е тестово заглавие', ''],
+            ['це є тестовий заголовок з ґ, є, ї, і', ''],
+        ];
     }
 }

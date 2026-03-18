@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 $UTF8_TO_ASCII[0x6d] = [
 'Zhou ', 'Ji ', 'Yi ', 'Hui ', 'Hui ', 'Zui ', 'Cheng ', 'Yin ', 'Wei ', 'Hou ', 'Jian ', 'Yang ', 'Lie ', 'Si ', 'Ji ', 'Er ',
 'Xing ', 'Fu ', 'Sa ', 'Suo ', 'Zhi ', 'Yin ', 'Wu ', 'Xi ', 'Kao ', 'Zhu ', 'Jiang ', 'Luo ', '[?]', 'An ', 'Dong ', 'Yi ',

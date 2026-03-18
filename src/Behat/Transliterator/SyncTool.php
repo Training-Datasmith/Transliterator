@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Transliterator;
 
 use RollingCurl\Request;
@@ -11,8 +13,8 @@ use Yaoi\String\Lexer\Parsed;
 use Yaoi\String\Lexer\Parser;
 use Yaoi\String\Lexer\Renderer;
 use Yaoi\String\Lexer\Token;
-use Yaoi\String\StringValue;
 use Yaoi\String\Parser as StringParser;
+use Yaoi\String\StringValue;
 
 /**
  * Tool for converting char tables for Behat/Transliterator from Perl to PHP
@@ -20,7 +22,7 @@ use Yaoi\String\Parser as StringParser;
  */
 class SyncTool extends Command
 {
-    const LIB_VERSION = '1.30';
+    public const LIB_VERSION = '1.30';
 
     private $tokenizer;
     private $renderer;
@@ -109,7 +111,6 @@ class SyncTool extends Command
             if ($item->value === '[?] ') {
                 $item->value = '[?]';
             }
-            //
 
             if ($item->value !== '[?]') {
                 $this->nonQuestionBoxFound = true;
@@ -210,4 +211,3 @@ PHP;
         return $list;
     }
 }
-

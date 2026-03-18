@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Behat\Tests\Transliterator;
 
 use PHPUnit\Framework\TestCase;
@@ -11,7 +13,7 @@ class DataTest extends TestCase
      */
     public function testDataFileIntegrity($file)
     {
-        $UTF8_TO_ASCII = array();
+        $UTF8_TO_ASCII = [];
 
         require __DIR__.'/../src/Behat/Transliterator/data/'.$file;
 
@@ -26,12 +28,12 @@ class DataTest extends TestCase
 
     public function provideDataFiles()
     {
-        $files = array();
+        $files = [];
 
         $iterator = new \FilesystemIterator(__DIR__.'/../src/Behat/Transliterator/data');
 
         foreach ($iterator as $file) {
-            $files[] = array($file->getFilename());
+            $files[] = [$file->getFilename()];
         }
 
         return $files;

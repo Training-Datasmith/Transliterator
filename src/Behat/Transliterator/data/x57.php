@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 $UTF8_TO_ASCII[0x57] = [
 'Guo ', 'Yin ', 'Hun ', 'Pu ', 'Yu ', 'Han ', 'Yuan ', 'Lun ', 'Quan ', 'Yu ', 'Qing ', 'Guo ', 'Chuan ', 'Wei ', 'Yuan ', 'Quan ',
 'Ku ', 'Fu ', 'Yuan ', 'Yuan ', 'E ', 'Tu ', 'Tu ', 'Tu ', 'Tuan ', 'Lue ', 'Hui ', 'Yi ', 'Yuan ', 'Luan ', 'Luan ', 'Tu ',

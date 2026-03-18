@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 $UTF8_TO_ASCII[0x0a] = [
 '[?]', '[?]', 'N', '[?]', '[?]', 'a', 'aa', 'i', 'ii', 'u', 'uu', '[?]', '[?]', '[?]', '[?]', 'ee',
 'ai', '[?]', '[?]', 'oo', 'au', 'k', 'kh', 'g', 'gh', 'ng', 'c', 'ch', 'j', 'jh', 'ny', 'tt',
