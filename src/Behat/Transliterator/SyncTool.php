@@ -31,13 +31,13 @@ class SyncTool extends Command
 
     public function __construct()
     {
-        $escape = array(
+        $escape = [
             '\\}' => '}',
             '\\\\' => '\\',
             '\\{' => '{',
             '\\@' => '@',
             '\\$' => '$',
-        );
+        ];
 
         $this->tokenizer = new Parser();
         $this->tokenizer->addLineStopper('#');
@@ -55,13 +55,13 @@ class SyncTool extends Command
             ->keepBoundaries('[');
     }
 
-    public static function setUpDefinition(Definition $definition, $options)
+    public static function setUpDefinition(Definition $definition, $options): void
     {
         $definition->name = 'update-data';
         $definition->description = 'Tool for converting char tables for Behat/Transliterator from Perl to PHP';
     }
 
-    public function performAction()
+    public function performAction(): void
     {
         $rollingCurl = new RollingCurl();
 
@@ -69,7 +69,7 @@ class SyncTool extends Command
             $rollingCurl->get($url);
         }
 
-        $rollingCurl->setCallback(function (Request $request, RollingCurl $rollingCurl) {
+        $rollingCurl->setCallback(function (Request $request, RollingCurl $rollingCurl): void {
             $this->response->addContent($request->getUrl());
             $content = $request->getResponseText();
             $this->parsePerlTable($content);
@@ -77,7 +77,7 @@ class SyncTool extends Command
             ->execute();
     }
 
-    private function removePhpCharTable($phpFilePath, $reason)
+    private function removePhpCharTable(string $phpFilePath, string $reason): void
     {
         $this->response->addContent($reason);
         if (file_exists($phpFilePath)) {
@@ -91,7 +91,7 @@ class SyncTool extends Command
         }
     }
 
-    private function pushItem($item)
+    private function pushItem($item): void
     {
         if ($this->itemIndex >= 16) {
             $this->phpTable = trim($this->phpTable);
@@ -115,7 +115,7 @@ class SyncTool extends Command
                 $this->nonQuestionBoxFound = true;
             }
 
-            $this->phpTable .= "'" . str_replace(array('\\', '\''), array('\\\\', '\\\''), $item) . "', ";
+            $this->phpTable .= "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $item) . "', ";
         }
     }
 
@@ -138,16 +138,13 @@ class SyncTool extends Command
         $itemsBind = (string)$parser->inner('[', ']');
 
         if (!$itemsBind) {
-            $items = array();
-        }
-        else {
-            $items = $binds[$itemsBind];
+            return [];
         }
 
-        return $items;
+        return $binds[$itemsBind];
     }
 
-    private function parsePerlTable($content)
+    private function parsePerlTable($content): void
     {
         $items = $this->tokenizePerlTable($content);
 
@@ -198,10 +195,13 @@ PHP;
 
     }
 
-    private function getPerlTablesUrlList()
+    /**
+     * @return non-falsy-string[]
+     */
+    private function getPerlTablesUrlList(): array
     {
         $client = new Client();
-        $list = array();
+        $list = [];
         $page = $client->fetch('https://st.aticpan.org/source/SBURKE/Text-Unidecode-' . self::LIB_VERSION . '/lib/Text/Unidecode/');
         foreach (StringParser::create($page)->innerAll('.pm\'>', '</a>') as $xXXpm) {
             $list[] = 'https://st.aticpan.org/source/SBURKE/Text-Unidecode-' . self::LIB_VERSION . '/lib/Text/Unidecode/'

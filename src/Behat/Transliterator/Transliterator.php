@@ -37,11 +37,13 @@ abstract class Transliterator
         $stringLength = strlen($string);
 
         for ($i = 0; $i < $stringLength; ++$i) {
-            if (ord($string[$i]) < 0x80) { // 0bbbbbbb
+            if (ord($string[$i]) < 0x80) {
+                // 0bbbbbbb
                 continue;
-            }  elseif ((ord($string[$i]) & 0xE0) == 0xC0) { // 110bbbbb
+            }
+            if ((ord($string[$i]) & 0xE0) == 0xC0) { // 110bbbbb
                 $n = 1;
-            } elseif ((ord($string[$i]) & 0xF0) == 0xE0) { //1110bbbb
+            }  elseif ((ord($string[$i]) & 0xF0) == 0xE0) { //1110bbbb
                 $n = 2;
             } elseif ((ord($string[$i]) & 0xF8) == 0xF0) { // 11110bbb
                 $n = 3;
@@ -49,7 +51,8 @@ abstract class Transliterator
                 $n = 4;
             } elseif ((ord($string[$i]) & 0xFE) == 0xFC) { // 1111110b
                 $n = 5;
-            } else {
+            }
+            else {
                 return false; // Does not match any model
             }
 
@@ -79,7 +82,7 @@ abstract class Transliterator
         }
 
         if (self::seemsUtf8($string)) {
-            $chars = array(
+            $chars = [
                 // Decompositions for Latin-1 Supplement
                 chr(195).chr(128) => 'A',
                 chr(195).chr(129) => 'A',
@@ -283,44 +286,39 @@ abstract class Transliterator
                 'æ' => 'a',
                 'ø' => 'o',
                 'å' => 'aa',
-            );
+            ];
 
-            $string = strtr($string, $chars);
-        } else {
-            $chars = array();
-            // Assume ISO-8859-1 if not UTF-8
-            $chars['in'] = chr(128).chr(131).chr(138).chr(142).chr(154).chr(158)
-                .chr(159).chr(162).chr(165).chr(181).chr(192).chr(193).chr(194)
-                .chr(195).chr(196).chr(197).chr(199).chr(200).chr(201).chr(202)
-                .chr(203).chr(204).chr(205).chr(206).chr(207).chr(209).chr(210)
-                .chr(211).chr(212).chr(213).chr(214).chr(216).chr(217).chr(218)
-                .chr(219).chr(220).chr(221).chr(224).chr(225).chr(226).chr(227)
-                .chr(228).chr(229).chr(231).chr(232).chr(233).chr(234).chr(235)
-                .chr(236).chr(237).chr(238).chr(239).chr(241).chr(242).chr(243)
-                .chr(244).chr(245).chr(246).chr(248).chr(249).chr(250).chr(251)
-                .chr(252).chr(253).chr(255);
-
-            $chars['out'] = 'EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy';
-
-            $string = strtr($string, $chars['in'], $chars['out']);
-
-            $doubleChars = array();
-            $doubleChars['in'] = array(
-                chr(140),
-                chr(156),
-                chr(198),
-                chr(208),
-                chr(222),
-                chr(223),
-                chr(230),
-                chr(240),
-                chr(254),
-            );
-            $doubleChars['out'] = array('OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th');
-            $string = str_replace($doubleChars['in'], $doubleChars['out'], $string);
+            return strtr($string, $chars);
         }
+        $chars = [];
+        // Assume ISO-8859-1 if not UTF-8
+        $chars['in'] = chr(128).chr(131).chr(138).chr(142).chr(154).chr(158)
+            .chr(159).chr(162).chr(165).chr(181).chr(192).chr(193).chr(194)
+            .chr(195).chr(196).chr(197).chr(199).chr(200).chr(201).chr(202)
+            .chr(203).chr(204).chr(205).chr(206).chr(207).chr(209).chr(210)
+            .chr(211).chr(212).chr(213).chr(214).chr(216).chr(217).chr(218)
+            .chr(219).chr(220).chr(221).chr(224).chr(225).chr(226).chr(227)
+            .chr(228).chr(229).chr(231).chr(232).chr(233).chr(234).chr(235)
+            .chr(236).chr(237).chr(238).chr(239).chr(241).chr(242).chr(243)
+            .chr(244).chr(245).chr(246).chr(248).chr(249).chr(250).chr(251)
+            .chr(252).chr(253).chr(255);
+        $chars['out'] = 'EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy';
+        $string = strtr($string, $chars['in'], $chars['out']);
+        $doubleChars = [];
+        $doubleChars['in'] = [
+            chr(140),
+            chr(156),
+            chr(198),
+            chr(208),
+            chr(222),
+            chr(223),
+            chr(230),
+            chr(240),
+            chr(254),
+        ];
+        $doubleChars['out'] = ['OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th'];
 
-        return $string;
+        return str_replace($doubleChars['in'], $doubleChars['out'], $string);
     }
 
     /**
@@ -384,7 +382,7 @@ abstract class Transliterator
                 if (file_exists($bankfile)) {
                     include $bankfile;
                 } else {
-                    $UTF8_TO_ASCII[$bank] = array();
+                    $UTF8_TO_ASCII[$bank] = [];
                 }
             }
 
@@ -562,10 +560,8 @@ abstract class Transliterator
      *
      * @param string $text
      * @param string $separator
-     *
-     * @return string
      */
-    private static function postProcessText($text, $separator)
+    private static function postProcessText($text, $separator): string
     {
         if (function_exists('mb_strtolower')) {
             $text = mb_strtolower($text);
