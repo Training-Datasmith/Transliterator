@@ -72,7 +72,7 @@ abstract class Transliterator
     /**
      * Replaces accentuated chars (and a few others) with their ASCII base char.
      *
-     * @see Transliterator::utf8ToAscii for a full transliteration to ASCII
+     * @see Transliterator::utf8_to_ascii for a full transliteration to ASCII
      *
      * @param string $string String to unaccent
      *
@@ -320,7 +320,7 @@ abstract class Transliterator
      *
      * @return string US-ASCII string
      */
-    public static function utf8to_ascii($str, $unknown = '?')
+    public static function utf8_to_ascii($str, $unknown = '?')
     {
         static $UTF8_TO_ASCII;
         if (strlen($str) == 0) {
@@ -401,7 +401,7 @@ abstract class Transliterator
     public static function transliterate($text, $separator = '-')
     {
         if (preg_match('/[\x80-\xff]/', $text) && self::valid_utf8($text)) {
-            $text = self::utf8to_ascii($text);
+            $text = self::utf8_to_ascii($text);
         }
         return self::post_process_text($text, $separator);
     }

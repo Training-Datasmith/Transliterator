@@ -6,12 +6,12 @@ namespace Behat\Tests\Transliterator;
 
 use PHPUnit\Framework\TestCase;
 
-class DataTest extends TestCase
+class Data_Test extends TestCase
 {
     /**
-     * @dataProvider provideDataFiles
+     * @dataProvider provide_data_files
      */
-    public function testDataFileIntegrity($file)
+    public function test_data_file_integrity($file)
     {
         $UTF8_TO_ASCII = [];
 
@@ -26,7 +26,7 @@ class DataTest extends TestCase
         $this->assertEquals(256, count($data), 'The value in $UTF8_TO_ASCII should have 256 elements.');
     }
 
-    public function provideDataFiles()
+    public function provide_data_files()
     {
         $files = [];
 

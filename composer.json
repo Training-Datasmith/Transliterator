@@ -9,6 +9,13 @@
   ],
   "type": "library",
   "license": "Artistic-1.0",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://raw.githubusercontent.com/Training-Datasmith/composer-index/remote-test-2026-11-09",
+      "canonical": false
+    }
+  ],
   "require": {
     "php": ">=7.2"
   },
@@ -26,6 +33,13 @@
     "psr-4": {
       "Behat\\Tests\\Transliterator\\": "tests"
     }
+  },
+  "scripts": {
+    "check-cluster-pins": "php scripts/check-cluster-pins.php",
+    "test": [
+      "@check-cluster-pins",
+      "phpunit --colors=never --no-coverage"
+    ]
   },
   "extra": {
     "branch-alias": {

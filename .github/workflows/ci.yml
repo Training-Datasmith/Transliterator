@@ -50,5 +50,8 @@ jobs:
             -   name: Install dependencies
                 run: composer update --ansi --no-progress --prefer-dist --no-interaction ${{ matrix.composer_flags }}
 
+            -   name: Check cluster pins
+                run: php scripts/check-cluster-pins.php
+
             -   name: Run tests
                 run: vendor/bin/phpunit -v --colors=always

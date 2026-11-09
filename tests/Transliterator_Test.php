@@ -7,17 +7,17 @@ namespace Behat\Tests\Transliterator;
 use Behat\Transliterator\Transliterator;
 use PHPUnit\Framework\TestCase;
 
-class TransliteratorTest extends TestCase
+class Transliterator_Test extends TestCase
 {
     /**
-     * @dataProvider provideUtf8ConversionCases
+     * @dataProvider provide_utf8_conversion_cases
      */
-    public function testUtf8Conversion($input, $expected)
+    public function test_utf8_conversion($input, $expected)
     {
-        $this->assertSame($expected, Transliterator::utf8ToAscii($input));
+        $this->assertSame($expected, Transliterator::utf8_to_ascii($input));
     }
 
-    public function provideUtf8ConversionCases()
+    public function provide_utf8_conversion_cases()
     {
         return [
             ['', ''],
@@ -32,14 +32,14 @@ class TransliteratorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideTransliterationCases
+     * @dataProvider provide_transliteration_cases
      */
-    public function testTransliteration($input, $expected)
+    public function test_transliteration($input, $expected)
     {
         $this->assertSame($expected, Transliterator::transliterate($input));
     }
 
-    public function provideTransliterationCases()
+    public function provide_transliteration_cases()
     {
         return [
             ['', ''],
@@ -56,14 +56,14 @@ class TransliteratorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideUnaccentCases
+     * @dataProvider provide_unaccent_cases
      */
-    public function testUnaccent($input, $expected)
+    public function test_unaccent($input, $expected)
     {
         $this->assertSame($expected, Transliterator::unaccent($input));
     }
 
-    public function provideUnaccentCases()
+    public function provide_unaccent_cases()
     {
         return [
             ['', ''],
@@ -75,14 +75,14 @@ class TransliteratorTest extends TestCase
     }
 
     /**
-     * @dataProvider provideUrlizationCases
+     * @dataProvider provide_urlization_cases
      */
-    public function testUrlization($input, $expected)
+    public function test_urlization($input, $expected)
     {
         $this->assertSame($expected, Transliterator::urlize($input));
     }
 
-    public function provideUrlizationCases()
+    public function provide_urlization_cases()
     {
         return [
             ['', ''],

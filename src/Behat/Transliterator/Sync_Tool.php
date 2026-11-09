@@ -1,10 +1,11 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
+
 namespace Behat\Transliterator;
 
-use Rolling_Curl\Request;
-use Rolling_Curl\Rolling_Curl;
+use RollingCurl\Request;
+use RollingCurl\RollingCurl;
 use Yaoi\Command;
 use Yaoi\Command\Definition;
 use Yaoi\Http\Client;
@@ -12,8 +13,8 @@ use Yaoi\String\Lexer\Parsed;
 use Yaoi\String\Lexer\Parser;
 use Yaoi\String\Lexer\Renderer;
 use Yaoi\String\Lexer\Token;
-use Yaoi\String\Parser as StringParser;
-use Yaoi\String\String_Value;
+use Yaoi\String\Parser as String_Parser;
+use Yaoi\String\StringValue;
 /**
  * Tool for converting char tables for Behat/Transliterator from Perl to PHP
  * @internal
@@ -27,40 +28,44 @@ class Sync_Tool extends Command
     private $item_index;
     private $non_question_box_found;
     private $block;
+
     public function __construct()
     {
         $escape = ['\}' => '}', '\\\\' => '\\', '\{' => '{', '\@' => '@', '\$' => '$'];
         $this->tokenizer = new Parser();
-        $this->tokenizer->add_line_stopper('#');
-        $this->tokenizer->add_quote('qq{', '}', $escape);
-        $this->tokenizer->add_quote('q{', '}', $escape);
-        $this->tokenizer->add_quote('"', '"');
-        $this->tokenizer->add_quote("'", "'");
-        $this->tokenizer->add_bracket('[', ']');
-        $this->tokenizer->add_delimiter(';');
+        $this->tokenizer->addLineStopper('#');
+        $this->tokenizer->addQuote('qq{', '}', $escape);
+        $this->tokenizer->addQuote('q{', '}', $escape);
+        $this->tokenizer->addQuote('"', '"');
+        $this->tokenizer->addQuote("'", "'");
+        $this->tokenizer->addBracket('[', ']');
+        $this->tokenizer->addDelimiter(';');
         $this->renderer = new Renderer();
-        $this->renderer->set_bind_key('-~z', 'z~-')->strip('#')->keep_boundaries('[');
+        $this->renderer->setBindKey('-~z', 'z~-')->strip('#')->keepBoundaries('[');
     }
-    public static function set_up_definition(Definition $definition, $options): void
+
+    public static function setUpDefinition(Definition $definition, $options): void
     {
         $definition->name = 'update-data';
         $definition->description = 'Tool for converting char tables for Behat/Transliterator from Perl to PHP';
     }
-    public function perform_action(): void
+
+    public function performAction(): void
     {
-        $rolling_curl = new Rolling_Curl();
+        $rolling_curl = new RollingCurl();
         foreach ($this->get_perl_tables_url_list() as $url) {
             $rolling_curl->get($url);
         }
-        $rolling_curl->set_callback(function (Request $request, Rolling_Curl $rolling_curl): void {
-            $this->response->add_content($request->get_url());
-            $content = $request->get_response_text();
+        $rolling_curl->setCallback(function (Request $request, RollingCurl $rolling_curl): void {
+            $this->response->addContent($request->getUrl());
+            $content = $request->getResponseText();
             $this->parse_perl_table($content);
         })->execute();
     }
+
     private function remove_php_char_table(string $php_file_path, string $reason): void
     {
-        $this->response->add_content($reason);
+        $this->response->addContent($reason);
         if (file_exists($php_file_path)) {
             if (unlink($php_file_path)) {
                 $this->response->success('Deleted');
@@ -71,6 +76,7 @@ class Sync_Tool extends Command
             $this->response->success('No PHP file, skipped');
         }
     }
+
     private function push_item($item): void
     {
         if ($this->item_index >= 16) {
@@ -79,7 +85,7 @@ class Sync_Tool extends Command
             $this->item_index = 0;
         }
         ++$this->item_index;
-        $item = new String_Value($item);
+        $item = new StringValue($item);
         if ($item->starts('\x') || $item->starts('\n')) {
             $this->php_table .= '"' . $item . '", ';
             $this->non_question_box_found = true;
@@ -94,31 +100,35 @@ class Sync_Tool extends Command
             $this->php_table .= "'" . str_replace(['\\', '\''], ['\\\\', '\\\''], $item) . "', ";
         }
     }
+
     private function tokenize_perl_table($content)
     {
         $tokens = $this->tokenizer->tokenize($content);
-        $expression = $this->renderer->get_expression($tokens);
-        $statement = $expression->get_statement();
+        $expression = $this->renderer->getExpression($tokens);
+        $statement = $expression->getStatement();
         /** @var Parsed[] $binds */
-        $binds = $expression->get_binds();
+        $binds = $expression->getBinds();
         $parser = new String_Parser($statement);
         $block = (string) $parser->inner('$Text::Unidecode::Char[', ']');
         if (!$block) {
             throw new \Exception('Block not found');
         }
-        $this->block = $this->renderer->get_expression($binds[$block])->get_statement();
+        $this->block = $this->renderer->getExpression($binds[$block])->getStatement();
         $items_bind = (string) $parser->inner('[', ']');
         if (!$items_bind) {
             return [];
         }
+
         return $binds[$items_bind];
     }
+
     private function parse_perl_table($content): void
     {
         $items = $this->tokenize_perl_table($content);
         $php_file_path = __DIR__ . '/data/' . substr($this->block, 1) . '.php';
         if (!$items) {
             $this->remove_php_char_table($php_file_path, 'Empty char table for block ' . $this->block);
+
             return;
         }
         $this->php_table = <<<PHP
@@ -126,9 +136,9 @@ class Sync_Tool extends Command
         \$UTF8_TO_ASCII[{$this->block}] = array(
         
         PHP;
-        $items_expression = $this->renderer->get_expression($items);
-        $items_statement = $items_expression->get_statement();
-        $items_binds = $items_expression->get_binds();
+        $items_expression = $this->renderer->getExpression($items);
+        $items_statement = $items_expression->getStatement();
+        $items_binds = $items_expression->getBinds();
         $items_statement = explode(',', $items_statement);
         $this->item_index = 0;
         $this->non_question_box_found = false;
@@ -140,7 +150,7 @@ class Sync_Tool extends Command
             if (isset($items_binds[$item])) {
                 /** @var Token $token */
                 $token = $items_binds[$item];
-                $item = $token->un_escaped_content;
+                $item = $token->unEscapedContent;
             }
             $this->push_item($item);
         }
@@ -155,6 +165,7 @@ class Sync_Tool extends Command
             $this->remove_php_char_table($php_file_path, 'Block ' . $this->block . ' contains only [?]');
         }
     }
+
     /**
      * @return non-falsy-string[]
      */
@@ -163,9 +174,10 @@ class Sync_Tool extends Command
         $client = new Client();
         $list = [];
         $page = $client->fetch('https://st.aticpan.org/source/SBURKE/Text-Unidecode-' . self::LIB_VERSION . '/lib/Text/Unidecode/');
-        foreach (String_Parser::create($page)->inner_all('.pm\'>', '</a>') as $x_x_xpm) {
+        foreach (String_Parser::create($page)->innerAll('.pm\'>', '</a>') as $x_x_xpm) {
             $list[] = 'https://st.aticpan.org/source/SBURKE/Text-Unidecode-' . self::LIB_VERSION . '/lib/Text/Unidecode/' . $x_x_xpm;
         }
+
         return $list;
     }
 }

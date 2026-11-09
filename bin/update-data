@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-use Behat\Transliterator\SyncTool;
+use Behat\Transliterator\Sync_Tool;
 use Yaoi\Cli\Command\Runner;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-Runner::create(new SyncTool)->run();
+Runner::create(new Sync_Tool)->run();
